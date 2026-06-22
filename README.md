@@ -1,0 +1,73 @@
+# 简历排版工具
+
+一个纯前端简历排版工具，支持结构化填写、模板切换、A4 实时预览、局部字体调整、PDF 打印导出，以及 JSON 备份导入导出。
+
+## 功能
+
+- 结构化编辑个人信息、教育背景、项目经历、个人能力、奖项和自定义模块
+- 支持照片、校徽上传，开源默认版本不内置真实校徽
+- 支持模块名称修改、模块排序、模块间距和字号等样式调整
+- 支持在右侧预览区选中文字后单独调整加粗、字号和字体
+- 支持导出 PDF，以及导出/导入完整 JSON 备份
+
+## 本地使用
+
+直接用浏览器打开 `index.html` 即可使用。
+
+也可以启动一个本地静态服务：
+
+```bash
+python -m http.server 8080
+```
+
+然后访问：
+
+```text
+http://localhost:8080
+```
+
+## 备份与恢复
+
+- 点击 `导出备份`，会下载 `resume-backup-YYYY-MM-DD.json`
+- 点击 `导入备份`，选择之前导出的 JSON 文件，即可恢复内容、排版样式和局部字体设置
+
+浏览器会自动把当前编辑内容保存到 `localStorage`，但建议在清缓存、换电脑或发布开源版本前先导出备份。
+
+## 部署到 GitHub Pages
+
+1. 在 GitHub 创建一个新仓库，例如 `resume-layout-tool`
+2. 将本项目文件提交并推送到仓库：
+
+```bash
+git init
+git add .
+git commit -m "Initial open source resume layout tool"
+git branch -M main
+git remote add origin https://github.com/<你的用户名>/resume-layout-tool.git
+git push -u origin main
+```
+
+3. 打开 GitHub 仓库页面，进入 `Settings` -> `Pages`
+4. `Build and deployment` 选择：
+   - Source: `Deploy from a branch`
+   - Branch: `main`
+   - Folder: `/ (root)`
+5. 保存后等待 GitHub Pages 构建完成
+
+部署地址通常是：
+
+```text
+https://<你的用户名>.github.io/resume-layout-tool/
+```
+
+## 隐私说明
+
+开源默认数据使用虚拟示例信息。你自己的简历内容只保存在本地浏览器或你手动导出的 JSON 文件中，不会上传到服务器。
+
+## 技术栈
+
+- HTML
+- CSS
+- JavaScript
+
+不依赖构建工具和后端服务，适合直接静态部署。

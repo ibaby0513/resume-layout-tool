@@ -1,0 +1,165 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>简历排版工具</title>
+    <link rel="stylesheet" href="styles.css" />
+  </head>
+  <body>
+    <div class="app-shell">
+      <header class="topbar">
+        <div>
+          <h1>简历排版工具</h1>
+          <p>结构化填写，实时排版，导出 A4 PDF</p>
+        </div>
+        <div class="topbar-actions">
+          <button id="backupExportBtn" class="ghost-button" type="button" title="导出当前内容和排版配置">导出备份</button>
+          <button id="backupImportBtn" class="ghost-button" type="button" title="导入之前导出的备份">导入备份</button>
+          <input id="backupImportInput" class="hidden-file-input" type="file" accept="application/json,.json" />
+          <button id="resetBtn" class="ghost-button" type="button" title="恢复示例数据">重置</button>
+          <button id="exportBtn" class="primary-button" type="button" title="导出 PDF">导出 PDF</button>
+        </div>
+      </header>
+
+      <main class="workspace">
+        <aside class="control-panel" aria-label="简历编辑面板">
+          <details class="panel-section compact collapsible-panel style-panel">
+            <summary class="panel-summary">模板</summary>
+            <div id="templateList" class="template-grid" role="radiogroup" aria-label="模板选择"></div>
+          </details>
+
+          <details class="panel-section compact collapsible-panel">
+            <summary class="panel-summary">样式</summary>
+            <div class="style-grid">
+              <label>
+                主题色
+                <input id="accentColor" type="color" />
+              </label>
+              <label>
+                字号
+                <input id="fontSize" type="range" min="11" max="16" step="0.5" />
+                <span id="fontSizeValue"></span>
+              </label>
+              <label>
+                字体
+                <select id="fontFamily">
+                  <option value='"SimSun", "Songti SC", "Microsoft YaHei", serif'>宋体风格</option>
+                  <option value='"Microsoft YaHei", "PingFang SC", Arial, sans-serif'>微软雅黑</option>
+                  <option value='"KaiTi", "STKaiti", "Microsoft YaHei", serif'>楷体风格</option>
+                  <option value='Arial, "Microsoft YaHei", sans-serif'>Arial</option>
+                </select>
+                <span></span>
+              </label>
+              <label>
+                正文字重
+                <select id="bodyWeight">
+                  <option value="400">常规</option>
+                  <option value="500">稍粗</option>
+                  <option value="600">半粗</option>
+                </select>
+                <span></span>
+              </label>
+              <label>
+                标题字重
+                <select id="headingWeight">
+                  <option value="700">加粗</option>
+                  <option value="800">重粗</option>
+                  <option value="600">半粗</option>
+                  <option value="400">常规</option>
+                </select>
+                <span></span>
+              </label>
+              <label>
+                行距
+                <input id="lineHeight" type="range" min="1.2" max="1.75" step="0.05" />
+                <span id="lineHeightValue"></span>
+              </label>
+              <label>
+                页边距
+                <input id="pageMargin" type="range" min="10" max="24" step="1" />
+                <span id="pageMarginValue"></span>
+              </label>
+              <label>
+                模块间距
+                <input id="sectionGap" type="range" min="2" max="24" step="1" />
+                <span id="sectionGapValue"></span>
+              </label>
+              <label>
+                条目间距
+                <input id="itemGap" type="range" min="1" max="18" step="1" />
+                <span id="itemGapValue"></span>
+              </label>
+              <label>
+                标题间距
+                <input id="titleGap" type="range" min="1" max="14" step="1" />
+                <span id="titleGapValue"></span>
+              </label>
+              <label>
+                照片大小
+                <input id="photoSize" type="range" min="22" max="44" step="1" />
+                <span id="photoSizeValue"></span>
+              </label>
+              <label>
+                校徽大小
+                <input id="logoSize" type="range" min="24" max="46" step="1" />
+                <span id="logoSizeValue"></span>
+              </label>
+            </div>
+          </details>
+
+          <details class="panel-section collapsible-panel">
+            <summary class="panel-summary">模块排序</summary>
+            <div id="sectionOrder" class="section-order"></div>
+          </details>
+
+          <section id="editorRoot" class="editor-root" aria-label="简历内容编辑"></section>
+        </aside>
+
+        <section class="preview-panel" aria-label="简历预览">
+          <div class="preview-toolbar">
+            <div>
+              <h2>实时预览</h2>
+              <p id="overflowHint">A4 单页适配正常</p>
+            </div>
+            <div class="preview-actions">
+              <div class="selection-tools" aria-label="预览区选中文字格式工具">
+                <span id="selectionStatus">选中预览文字后可单独调整</span>
+                <label class="selection-size-field" title="输入选中文字字号">
+                  <span>字号</span>
+                  <input id="selectionFontSize" type="number" min="8" max="48" step="0.5" placeholder="字号" />
+                </label>
+                <select id="selectionFontFamily" title="设置选中文字字体">
+                  <option value="">字体</option>
+                  <option value="simsun">宋体</option>
+                  <option value="yahei">微软雅黑</option>
+                  <option value="kaiti">楷体</option>
+                  <option value="times">Times New Roman</option>
+                  <option value="arial">Arial</option>
+                </select>
+                <button id="selectionBoldBtn" class="small-button" type="button" title="加粗选中文字">B</button>
+              </div>
+              <button id="jsonBtn" class="ghost-button" type="button" title="查看结构化 JSON">查看 JSON</button>
+            </div>
+          </div>
+          <div class="paper-stage">
+            <article id="resumePaper" class="resume-paper" aria-label="A4 简历预览"></article>
+          </div>
+        </section>
+      </main>
+    </div>
+
+    <dialog id="jsonDialog" class="json-dialog">
+      <form method="dialog">
+        <div class="dialog-header">
+          <h2>结构化简历数据</h2>
+          <button class="icon-button" value="close" aria-label="关闭" title="关闭">x</button>
+        </div>
+        <pre id="jsonOutput"></pre>
+      </form>
+    </dialog>
+
+    <script src="state-backup.js"></script>
+    <script src="app.js"></script>
+  </body>
+</html>
