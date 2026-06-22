@@ -10,6 +10,12 @@
 - 支持在右侧预览区选中文字后单独调整加粗、字号和字体
 - 支持导出 PDF，以及导出/导入完整 JSON 备份
 
+## 在线使用
+
+访问已部署页面：
+
+[https://ibaby0513.github.io/resume-layout-tool/](https://ibaby0513.github.io/resume-layout-tool/)
+
 ## 本地使用
 
 直接用浏览器打开 `index.html` 即可使用。
@@ -32,33 +38,6 @@ http://localhost:8080
 - 点击 `导入备份`，选择之前导出的 JSON 文件，即可恢复内容、排版样式和局部字体设置
 
 浏览器会自动把当前编辑内容保存到 `localStorage`，但建议在清缓存、换电脑或发布开源版本前先导出备份。
-
-## 部署到 GitHub Pages
-
-1. 在 GitHub 创建一个新仓库，例如 `resume-layout-tool`
-2. 将本项目文件提交并推送到仓库：
-
-```bash
-git init
-git add .
-git commit -m "Initial open source resume layout tool"
-git branch -M main
-git remote add origin https://github.com/<你的用户名>/resume-layout-tool.git
-git push -u origin main
-```
-
-3. 打开 GitHub 仓库页面，进入 `Settings` -> `Pages`
-4. `Build and deployment` 选择：
-   - Source: `Deploy from a branch`
-   - Branch: `main`
-   - Folder: `/ (root)`
-5. 保存后等待 GitHub Pages 构建完成
-
-部署地址通常是：
-
-```text
-https://<你的用户名>.github.io/resume-layout-tool/
-```
 
 ## 隐私说明
 
