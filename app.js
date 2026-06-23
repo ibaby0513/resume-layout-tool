@@ -35,7 +35,7 @@ const DEFAULT_STATE = {
     fontFamily: '"SimSun", "Songti SC", "Microsoft YaHei", serif',
     bodyWeight: "400",
     headingWeight: "800",
-    fontSize: 12.5,
+    fontSize: 13.5,
     lineHeight: 1.42,
     pageMargin: 13,
     sectionGap: 9,
