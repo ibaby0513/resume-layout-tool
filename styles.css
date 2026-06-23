@@ -1141,19 +1141,53 @@ button {
 }
 
 .summary-drag-handle {
-  flex: 0 0 auto;
-  width: 8px;
-  height: 20px;
+  position: absolute;
+  top: -3px;
+  bottom: -3px;
+  left: 0;
+  width: 9px;
+  z-index: 6;
+  padding: 0;
+  border: 0;
   border-radius: 999px;
-  background: var(--resume-accent, var(--accent));
+  background: transparent;
   cursor: ew-resize;
-  opacity: 0.9;
+  transform: translateX(-50%);
+  opacity: 0;
+  transition: opacity 120ms ease;
+}
+
+.summary-drag-handle::before {
+  content: "";
+  position: absolute;
+  left: 4px;
+  top: 0;
+  bottom: 0;
+  width: 1px;
+  background: rgba(37, 111, 143, 0.42);
+}
+
+.summary-drag-handle::after {
+  content: "";
+  position: absolute;
+  left: 1px;
+  top: -5px;
+  width: 7px;
+  height: 7px;
+  border-radius: 50%;
+  background: var(--resume-accent, var(--accent));
+  box-shadow: 0 0 0 2px #ffffff;
 }
 
 .section-summary:hover .summary-drag-handle,
 .summary-drag-handle:hover {
   opacity: 1;
-  box-shadow: 0 0 0 3px rgba(31, 93, 122, 0.14);
+}
+
+.summary-drag-handle:hover::before,
+.summary-drag-handle:focus-visible::before {
+  width: 2px;
+  background: var(--resume-accent, var(--accent));
 }
 
 .summary-box p:last-child {

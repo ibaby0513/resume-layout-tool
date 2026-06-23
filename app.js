@@ -1383,7 +1383,8 @@ function wrapSection(keyOrTitle, content, customTitle = false, titleRef = "") {
       : "";
   return `
     <section class="resume-section${sectionClass}">
-      <h3 class="resume-section-title">${dragHandle}${icon}<span ${sectionTitleRef ? `data-ref="${sectionTitleRef}"` : ""}>${richText(title)}</span></h3>
+      ${dragHandle}
+      <h3 class="resume-section-title">${icon}<span ${sectionTitleRef ? `data-ref="${sectionTitleRef}"` : ""}>${richText(title)}</span></h3>
       ${content}
     </section>
   `;
