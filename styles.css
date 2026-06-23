@@ -1107,8 +1107,8 @@ button {
   min-width: 0;
 }
 
-.info-row:nth-child(7),
-.info-row:nth-child(8) {
+.info-row-address,
+.info-row-researchDirection {
   grid-column: 1 / -1;
 }
 

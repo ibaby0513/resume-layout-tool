@@ -1269,7 +1269,10 @@ function renderAcademicHeader(profile) {
         ${profile.target ? `<div class="academic-target" data-ref="profile.target">${richText(profile.target)}</div>` : ""}
       </div>
       <div class="academic-info"><span class="profile-info-drag-handle" title="左右拖动顶部个人信息位置" aria-hidden="true"></span>${info
-        .map(([label, value, key]) => `<div class="info-row"><strong>${label}：</strong><span data-ref="profile.${key}">${richText(value)}</span></div>`)
+        .map(
+          ([label, value, key]) =>
+            `<div class="info-row info-row-${key}"><strong>${label}：</strong><span data-ref="profile.${key}">${richText(value)}</span></div>`
+        )
         .join("")}</div>
       <div class="resume-photo"><span class="photo-drag-handle" title="左右拖动照片位置" aria-hidden="true"></span>${profile.photo ? `<img src="${profile.photo}" alt="证件照片" />` : `<span>照片</span>`}</div>
     </header>
