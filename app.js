@@ -496,7 +496,7 @@ function startHeaderOffsetDrag(event, handle, xKey, yKey, xVariable, yVariable) 
   const startXOffset = Number(state.styles[xKey]) || 0;
   const startYOffset = yKey ? Number(state.styles[yKey]) || 0 : 0;
   const move = (moveEvent) => {
-    state.styles[xKey] = clamp(startXOffset + moveEvent.clientX - startX, -90, 90);
+    state.styles[xKey] = clamp(startXOffset + moveEvent.clientX - startX, -180, 180);
     root.paper.style.setProperty(xVariable, `${state.styles[xKey]}px`);
     if (yKey && yVariable) {
       state.styles[yKey] = clamp(startYOffset + moveEvent.clientY - startY, -60, 60);
