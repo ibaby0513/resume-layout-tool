@@ -1105,8 +1105,9 @@ button {
 }
 
 .info-row strong {
-  flex: 0 0 4.8em;
+  flex: 0 0 5.6em;
   color: #111111;
+  white-space: nowrap;
 }
 
 .info-row span {
@@ -1126,7 +1127,7 @@ button {
 
 .info-row-address strong,
 .info-row-researchDirection strong {
-  flex-basis: 4.8em;
+  flex-basis: 5.6em;
 }
 
 .resume-photo {
@@ -1162,10 +1163,10 @@ button {
 .photo-drag-handle,
 .name-drag-handle {
   position: absolute;
-  top: -3px;
-  bottom: -3px;
+  top: -11px;
   left: 0;
-  width: 9px;
+  width: 18px;
+  height: 12px;
   z-index: 6;
   padding: 0;
   border: 0;
@@ -1183,11 +1184,12 @@ button {
 .name-drag-handle::before {
   content: "";
   position: absolute;
-  left: 4px;
-  top: 0;
-  bottom: 0;
-  width: 1px;
-  background: rgba(37, 111, 143, 0.42);
+  left: 2px;
+  right: 2px;
+  top: 5px;
+  height: 2px;
+  border-radius: 999px;
+  background: rgba(37, 111, 143, 0.55);
 }
 
 .profile-info-drag-handle::after,
@@ -1196,10 +1198,10 @@ button {
 .name-drag-handle::after {
   content: "";
   position: absolute;
-  left: 1px;
-  top: -5px;
-  width: 7px;
-  height: 7px;
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 6px;
   border-radius: 50%;
   background: var(--resume-accent, var(--accent));
   box-shadow: 0 0 0 2px #ffffff;
@@ -1224,7 +1226,6 @@ button {
 .photo-drag-handle:focus-visible::before,
 .name-drag-handle:hover::before,
 .name-drag-handle:focus-visible::before {
-  width: 2px;
   background: var(--resume-accent, var(--accent));
 }
 
