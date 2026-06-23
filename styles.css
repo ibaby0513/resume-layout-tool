@@ -1082,9 +1082,11 @@ button {
 
 .academic-info {
   grid-area: info;
+  position: relative;
   display: grid;
   grid-template-columns: repeat(2, minmax(0, 1fr));
   gap: 3px 12px;
+  transform: translateX(var(--resume-info-offset, 0px));
 }
 
 .info-row {
@@ -1110,6 +1112,7 @@ button {
 
 .resume-photo {
   grid-area: photo;
+  position: relative;
   width: var(--resume-photo-size, 31mm);
   height: calc(var(--resume-photo-size, 31mm) * 1.27);
   display: grid;
@@ -1119,7 +1122,7 @@ button {
   background: #ffffff;
   color: #777777;
   font-size: 13px;
-  transform: translateY(var(--resume-photo-offset, 0px));
+  transform: translateX(var(--resume-photo-offset, 0px));
 }
 
 .resume-photo img {
@@ -1135,12 +1138,8 @@ button {
   border-left: 4px solid var(--resume-accent, var(--accent));
 }
 
-.section-summary {
-  position: relative;
-  transform: translateX(var(--resume-summary-offset, 0px));
-}
-
-.summary-drag-handle {
+.profile-info-drag-handle,
+.photo-drag-handle {
   position: absolute;
   top: -3px;
   bottom: -3px;
@@ -1157,7 +1156,8 @@ button {
   transition: opacity 120ms ease;
 }
 
-.summary-drag-handle::before {
+.profile-info-drag-handle::before,
+.photo-drag-handle::before {
   content: "";
   position: absolute;
   left: 4px;
@@ -1167,7 +1167,8 @@ button {
   background: rgba(37, 111, 143, 0.42);
 }
 
-.summary-drag-handle::after {
+.profile-info-drag-handle::after,
+.photo-drag-handle::after {
   content: "";
   position: absolute;
   left: 1px;
@@ -1179,13 +1180,17 @@ button {
   box-shadow: 0 0 0 2px #ffffff;
 }
 
-.section-summary:hover .summary-drag-handle,
-.summary-drag-handle:hover {
+.academic-info:hover .profile-info-drag-handle,
+.profile-info-drag-handle:hover,
+.resume-photo:hover .photo-drag-handle,
+.photo-drag-handle:hover {
   opacity: 1;
 }
 
-.summary-drag-handle:hover::before,
-.summary-drag-handle:focus-visible::before {
+.profile-info-drag-handle:hover::before,
+.profile-info-drag-handle:focus-visible::before,
+.photo-drag-handle:hover::before,
+.photo-drag-handle:focus-visible::before {
   width: 2px;
   background: var(--resume-accent, var(--accent));
 }

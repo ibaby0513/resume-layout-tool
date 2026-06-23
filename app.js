@@ -44,7 +44,7 @@ const DEFAULT_STATE = {
     photoSize: 31,
     photoOffset: 0,
     logoSize: 35,
-    summaryOffset: 0,
+    infoOffset: 0,
     educationSchoolCol: 62,
     educationDegreeCol: 32,
     projectRoleCol: 38,
@@ -170,8 +170,8 @@ const root = {
   photoOffsetValue: document.querySelector("#photoOffsetValue"),
   logoSize: document.querySelector("#logoSize"),
   logoSizeValue: document.querySelector("#logoSizeValue"),
-  summaryOffset: document.querySelector("#summaryOffset"),
-  summaryOffsetValue: document.querySelector("#summaryOffsetValue"),
+  infoOffset: document.querySelector("#infoOffset"),
+  infoOffsetValue: document.querySelector("#infoOffsetValue"),
   backupExportBtn: document.querySelector("#backupExportBtn"),
   backupImportBtn: document.querySelector("#backupImportBtn"),
   backupImportInput: document.querySelector("#backupImportInput"),
@@ -236,7 +236,7 @@ function bindGlobalActions() {
   bindStyle("photoSize", Number);
   bindStyle("photoOffset", Number);
   bindStyle("logoSize", Number);
-  bindStyle("summaryOffset", Number);
+  bindStyle("infoOffset", Number);
 }
 
 function exportStateBackup() {
@@ -358,7 +358,7 @@ function renderStyleControls() {
   setControl("photoSize", styles.photoSize, "mm");
   setControl("photoOffset", styles.photoOffset, "px");
   setControl("logoSize", styles.logoSize, "mm");
-  setControl("summaryOffset", styles.summaryOffset, "px");
+  setControl("infoOffset", styles.infoOffset, "px");
 }
 
 function setControl(key, value, unit, digits) {
@@ -376,9 +376,15 @@ function updateStyle(key, value) {
 }
 
 function startEducationTabDrag(event) {
-  const summaryHandle = event.target.closest(".summary-drag-handle");
-  if (summaryHandle) {
-    startSummaryDrag(event, summaryHandle);
+  const infoHandle = event.target.closest(".profile-info-drag-handle");
+  if (infoHandle) {
+    startHeaderOffsetDrag(event, infoHandle, "infoOffset", "--resume-info-offset");
+    return;
+  }
+
+  const photoHandle = event.target.closest(".photo-drag-handle");
+  if (photoHandle) {
+    startHeaderOffsetDrag(event, photoHandle, "photoOffset", "--resume-photo-offset");
     return;
   }
 
@@ -460,15 +466,15 @@ function updateProjectTabFromPointer(row, clientX) {
   root.paper.style.setProperty("--project-role-col", `${state.styles.projectRoleCol}mm`);
 }
 
-function startSummaryDrag(event, handle) {
+function startHeaderOffsetDrag(event, handle, styleKey, cssVariable) {
   event.preventDefault();
   event.stopPropagation();
 
   const startX = event.clientX;
-  const startOffset = Number(state.styles.summaryOffset) || 0;
+  const startOffset = Number(state.styles[styleKey]) || 0;
   const move = (moveEvent) => {
-    state.styles.summaryOffset = clamp(startOffset + moveEvent.clientX - startX, -90, 90);
-    root.paper.style.setProperty("--resume-summary-offset", `${state.styles.summaryOffset}px`);
+    state.styles[styleKey] = clamp(startOffset + moveEvent.clientX - startX, -90, 90);
+    root.paper.style.setProperty(cssVariable, `${state.styles[styleKey]}px`);
     renderStyleControls();
   };
   const stop = () => {
@@ -1170,7 +1176,7 @@ function renderPreview() {
   root.paper.style.setProperty("--resume-photo-size", `${styles.photoSize}mm`);
   root.paper.style.setProperty("--resume-photo-offset", `${styles.photoOffset}px`);
   root.paper.style.setProperty("--resume-logo-size", `${styles.logoSize}mm`);
-  root.paper.style.setProperty("--resume-summary-offset", `${styles.summaryOffset}px`);
+  root.paper.style.setProperty("--resume-info-offset", `${styles.infoOffset}px`);
   root.paper.style.setProperty("--education-school-col", `${styles.educationSchoolCol}mm`);
   root.paper.style.setProperty("--education-degree-col", `${styles.educationDegreeCol}mm`);
   root.paper.style.setProperty("--project-role-col", `${styles.projectRoleCol}mm`);
@@ -1231,10 +1237,10 @@ function renderAcademicHeader(profile) {
         <h2 data-ref="profile.name">${richText(profile.name || "未命名简历")}</h2>
         ${profile.target ? `<div class="academic-target" data-ref="profile.target">${richText(profile.target)}</div>` : ""}
       </div>
-      <div class="academic-info">${info
+      <div class="academic-info"><span class="profile-info-drag-handle" title="左右拖动顶部个人信息位置" aria-hidden="true"></span>${info
         .map(([label, value, key]) => `<div class="info-row"><strong>${label}：</strong><span data-ref="profile.${key}">${richText(value)}</span></div>`)
         .join("")}</div>
-      <div class="resume-photo">${profile.photo ? `<img src="${profile.photo}" alt="证件照片" />` : `<span>照片</span>`}</div>
+      <div class="resume-photo"><span class="photo-drag-handle" title="左右拖动照片位置" aria-hidden="true"></span>${profile.photo ? `<img src="${profile.photo}" alt="证件照片" />` : `<span>照片</span>`}</div>
     </header>
   `;
 }
@@ -1377,13 +1383,8 @@ function wrapSection(keyOrTitle, content, customTitle = false, titleRef = "") {
       ? `<img class="section-icon" src="${TEMPLATE_ASSETS[iconKey]}" alt="" />`
       : "";
   const sectionClass = !customTitle && typeof keyOrTitle === "string" ? ` section-${keyOrTitle}` : "";
-  const dragHandle =
-    !customTitle && keyOrTitle === "summary"
-      ? `<span class="summary-drag-handle" title="左右拖动自我介绍位置" aria-hidden="true"></span>`
-      : "";
   return `
     <section class="resume-section${sectionClass}">
-      ${dragHandle}
       <h3 class="resume-section-title">${icon}<span ${sectionTitleRef ? `data-ref="${sectionTitleRef}"` : ""}>${richText(title)}</span></h3>
       ${content}
     </section>
