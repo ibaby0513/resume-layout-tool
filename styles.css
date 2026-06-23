@@ -1141,22 +1141,19 @@ button {
 }
 
 .summary-drag-handle {
-  position: absolute;
-  top: 4px;
-  left: -12px;
+  flex: 0 0 auto;
   width: 8px;
-  height: calc(100% - 8px);
-  min-height: 24px;
+  height: 20px;
   border-radius: 999px;
-  background: rgba(31, 93, 122, 0.3);
+  background: var(--resume-accent, var(--accent));
   cursor: ew-resize;
-  opacity: 0.45;
+  opacity: 0.9;
 }
 
 .section-summary:hover .summary-drag-handle,
 .summary-drag-handle:hover {
   opacity: 1;
-  background: var(--resume-accent, var(--accent));
+  box-shadow: 0 0 0 3px rgba(31, 93, 122, 0.14);
 }
 
 .summary-box p:last-child {
