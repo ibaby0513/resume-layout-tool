@@ -316,6 +316,7 @@ function mergeDefaults(base, saved) {
   if (!saved || typeof saved !== "object") return base;
   const merged = { ...base, ...saved };
   merged.styles = { ...base.styles, ...(saved.styles || {}) };
+  if (Number(saved.styles?.fontSize) === 12.5) merged.styles.fontSize = 13.5;
   if (merged.styles.educationSchoolCol < 58) merged.styles.educationSchoolCol = 62;
   if (merged.styles.educationDegreeCol < 24) merged.styles.educationDegreeCol = 32;
   merged.sectionTitles = { ...base.sectionTitles, ...(saved.sectionTitles || {}) };
