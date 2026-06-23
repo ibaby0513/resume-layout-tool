@@ -43,7 +43,10 @@ const DEFAULT_STATE = {
     titleGap: 5,
     photoSize: 31,
     photoOffset: 0,
+    photoOffsetY: 0,
     logoSize: 35,
+    nameOffset: 0,
+    nameOffsetY: 0,
     infoOffset: 0,
     educationSchoolCol: 62,
     educationDegreeCol: 32,
@@ -168,8 +171,14 @@ const root = {
   photoSizeValue: document.querySelector("#photoSizeValue"),
   photoOffset: document.querySelector("#photoOffset"),
   photoOffsetValue: document.querySelector("#photoOffsetValue"),
+  photoOffsetY: document.querySelector("#photoOffsetY"),
+  photoOffsetYValue: document.querySelector("#photoOffsetYValue"),
   logoSize: document.querySelector("#logoSize"),
   logoSizeValue: document.querySelector("#logoSizeValue"),
+  nameOffset: document.querySelector("#nameOffset"),
+  nameOffsetValue: document.querySelector("#nameOffsetValue"),
+  nameOffsetY: document.querySelector("#nameOffsetY"),
+  nameOffsetYValue: document.querySelector("#nameOffsetYValue"),
   infoOffset: document.querySelector("#infoOffset"),
   infoOffsetValue: document.querySelector("#infoOffsetValue"),
   backupExportBtn: document.querySelector("#backupExportBtn"),
@@ -235,7 +244,10 @@ function bindGlobalActions() {
   bindStyle("titleGap", Number);
   bindStyle("photoSize", Number);
   bindStyle("photoOffset", Number);
+  bindStyle("photoOffsetY", Number);
   bindStyle("logoSize", Number);
+  bindStyle("nameOffset", Number);
+  bindStyle("nameOffsetY", Number);
   bindStyle("infoOffset", Number);
 }
 
@@ -357,7 +369,10 @@ function renderStyleControls() {
   setControl("titleGap", styles.titleGap, "px");
   setControl("photoSize", styles.photoSize, "mm");
   setControl("photoOffset", styles.photoOffset, "px");
+  setControl("photoOffsetY", styles.photoOffsetY, "px");
   setControl("logoSize", styles.logoSize, "mm");
+  setControl("nameOffset", styles.nameOffset, "px");
+  setControl("nameOffsetY", styles.nameOffsetY, "px");
   setControl("infoOffset", styles.infoOffset, "px");
 }
 
@@ -376,15 +391,21 @@ function updateStyle(key, value) {
 }
 
 function startEducationTabDrag(event) {
+  const nameHandle = event.target.closest(".name-drag-handle");
+  if (nameHandle) {
+    startHeaderOffsetDrag(event, nameHandle, "nameOffset", "nameOffsetY", "--resume-name-offset-x", "--resume-name-offset-y");
+    return;
+  }
+
   const infoHandle = event.target.closest(".profile-info-drag-handle");
   if (infoHandle) {
-    startHeaderOffsetDrag(event, infoHandle, "infoOffset", "--resume-info-offset");
+    startHeaderOffsetDrag(event, infoHandle, "infoOffset", "", "--resume-info-offset", "");
     return;
   }
 
   const photoHandle = event.target.closest(".photo-drag-handle");
   if (photoHandle) {
-    startHeaderOffsetDrag(event, photoHandle, "photoOffset", "--resume-photo-offset");
+    startHeaderOffsetDrag(event, photoHandle, "photoOffset", "photoOffsetY", "--resume-photo-offset-x", "--resume-photo-offset-y");
     return;
   }
 
@@ -466,15 +487,21 @@ function updateProjectTabFromPointer(row, clientX) {
   root.paper.style.setProperty("--project-role-col", `${state.styles.projectRoleCol}mm`);
 }
 
-function startHeaderOffsetDrag(event, handle, styleKey, cssVariable) {
+function startHeaderOffsetDrag(event, handle, xKey, yKey, xVariable, yVariable) {
   event.preventDefault();
   event.stopPropagation();
 
   const startX = event.clientX;
-  const startOffset = Number(state.styles[styleKey]) || 0;
+  const startY = event.clientY;
+  const startXOffset = Number(state.styles[xKey]) || 0;
+  const startYOffset = yKey ? Number(state.styles[yKey]) || 0 : 0;
   const move = (moveEvent) => {
-    state.styles[styleKey] = clamp(startOffset + moveEvent.clientX - startX, -90, 90);
-    root.paper.style.setProperty(cssVariable, `${state.styles[styleKey]}px`);
+    state.styles[xKey] = clamp(startXOffset + moveEvent.clientX - startX, -90, 90);
+    root.paper.style.setProperty(xVariable, `${state.styles[xKey]}px`);
+    if (yKey && yVariable) {
+      state.styles[yKey] = clamp(startYOffset + moveEvent.clientY - startY, -60, 60);
+      root.paper.style.setProperty(yVariable, `${state.styles[yKey]}px`);
+    }
     renderStyleControls();
   };
   const stop = () => {
@@ -1174,8 +1201,11 @@ function renderPreview() {
   root.paper.style.setProperty("--resume-item-gap", `${styles.itemGap}px`);
   root.paper.style.setProperty("--resume-title-gap", `${styles.titleGap}px`);
   root.paper.style.setProperty("--resume-photo-size", `${styles.photoSize}mm`);
-  root.paper.style.setProperty("--resume-photo-offset", `${styles.photoOffset}px`);
+  root.paper.style.setProperty("--resume-photo-offset-x", `${styles.photoOffset}px`);
+  root.paper.style.setProperty("--resume-photo-offset-y", `${styles.photoOffsetY}px`);
   root.paper.style.setProperty("--resume-logo-size", `${styles.logoSize}mm`);
+  root.paper.style.setProperty("--resume-name-offset-x", `${styles.nameOffset}px`);
+  root.paper.style.setProperty("--resume-name-offset-y", `${styles.nameOffsetY}px`);
   root.paper.style.setProperty("--resume-info-offset", `${styles.infoOffset}px`);
   root.paper.style.setProperty("--education-school-col", `${styles.educationSchoolCol}mm`);
   root.paper.style.setProperty("--education-degree-col", `${styles.educationDegreeCol}mm`);
@@ -1234,6 +1264,7 @@ function renderAcademicHeader(profile) {
         ${profile.logo ? `<img src="${escapeAttribute(profile.logo)}" alt="${escapeAttribute(profile.school || "校徽")}" />` : ""}
       </div>
       <div class="academic-name-block">
+        <span class="name-drag-handle" title="拖动姓名和岗位位置" aria-hidden="true"></span>
         <h2 data-ref="profile.name">${richText(profile.name || "未命名简历")}</h2>
         ${profile.target ? `<div class="academic-target" data-ref="profile.target">${richText(profile.target)}</div>` : ""}
       </div>

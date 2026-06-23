@@ -1063,6 +1063,8 @@ button {
 
 .academic-name-block {
   grid-area: name;
+  position: relative;
+  transform: translate(var(--resume-name-offset-x, 0px), var(--resume-name-offset-y, 0px));
 }
 
 .academic-name-block h2 {
@@ -1122,7 +1124,7 @@ button {
   background: #ffffff;
   color: #777777;
   font-size: 13px;
-  transform: translateX(var(--resume-photo-offset, 0px));
+  transform: translate(var(--resume-photo-offset-x, 0px), var(--resume-photo-offset-y, 0px));
 }
 
 .resume-photo img {
@@ -1139,7 +1141,8 @@ button {
 }
 
 .profile-info-drag-handle,
-.photo-drag-handle {
+.photo-drag-handle,
+.name-drag-handle {
   position: absolute;
   top: -3px;
   bottom: -3px;
@@ -1150,14 +1153,15 @@ button {
   border: 0;
   border-radius: 999px;
   background: transparent;
-  cursor: ew-resize;
+  cursor: move;
   transform: translateX(-50%);
   opacity: 0;
   transition: opacity 120ms ease;
 }
 
 .profile-info-drag-handle::before,
-.photo-drag-handle::before {
+.photo-drag-handle::before,
+.name-drag-handle::before {
   content: "";
   position: absolute;
   left: 4px;
@@ -1168,7 +1172,8 @@ button {
 }
 
 .profile-info-drag-handle::after,
-.photo-drag-handle::after {
+.photo-drag-handle::after,
+.name-drag-handle::after {
   content: "";
   position: absolute;
   left: 1px;
@@ -1183,14 +1188,18 @@ button {
 .academic-info:hover .profile-info-drag-handle,
 .profile-info-drag-handle:hover,
 .resume-photo:hover .photo-drag-handle,
-.photo-drag-handle:hover {
+.photo-drag-handle:hover,
+.academic-name-block:hover .name-drag-handle,
+.name-drag-handle:hover {
   opacity: 1;
 }
 
 .profile-info-drag-handle:hover::before,
 .profile-info-drag-handle:focus-visible::before,
 .photo-drag-handle:hover::before,
-.photo-drag-handle:focus-visible::before {
+.photo-drag-handle:focus-visible::before,
+.name-drag-handle:hover::before,
+.name-drag-handle:focus-visible::before {
   width: 2px;
   background: var(--resume-accent, var(--accent));
 }
