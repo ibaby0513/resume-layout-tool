@@ -42,7 +42,9 @@ const DEFAULT_STATE = {
     itemGap: 7,
     titleGap: 5,
     photoSize: 31,
+    photoOffset: 0,
     logoSize: 35,
+    summaryOffset: 0,
     educationSchoolCol: 62,
     educationDegreeCol: 32,
     projectRoleCol: 38,
@@ -164,8 +166,12 @@ const root = {
   titleGapValue: document.querySelector("#titleGapValue"),
   photoSize: document.querySelector("#photoSize"),
   photoSizeValue: document.querySelector("#photoSizeValue"),
+  photoOffset: document.querySelector("#photoOffset"),
+  photoOffsetValue: document.querySelector("#photoOffsetValue"),
   logoSize: document.querySelector("#logoSize"),
   logoSizeValue: document.querySelector("#logoSizeValue"),
+  summaryOffset: document.querySelector("#summaryOffset"),
+  summaryOffsetValue: document.querySelector("#summaryOffsetValue"),
   backupExportBtn: document.querySelector("#backupExportBtn"),
   backupImportBtn: document.querySelector("#backupImportBtn"),
   backupImportInput: document.querySelector("#backupImportInput"),
@@ -228,7 +234,9 @@ function bindGlobalActions() {
   bindStyle("itemGap", Number);
   bindStyle("titleGap", Number);
   bindStyle("photoSize", Number);
+  bindStyle("photoOffset", Number);
   bindStyle("logoSize", Number);
+  bindStyle("summaryOffset", Number);
 }
 
 function exportStateBackup() {
@@ -348,7 +356,9 @@ function renderStyleControls() {
   setControl("itemGap", styles.itemGap, "px");
   setControl("titleGap", styles.titleGap, "px");
   setControl("photoSize", styles.photoSize, "mm");
+  setControl("photoOffset", styles.photoOffset, "px");
   setControl("logoSize", styles.logoSize, "mm");
+  setControl("summaryOffset", styles.summaryOffset, "px");
 }
 
 function setControl(key, value, unit, digits) {
@@ -1129,7 +1139,9 @@ function renderPreview() {
   root.paper.style.setProperty("--resume-item-gap", `${styles.itemGap}px`);
   root.paper.style.setProperty("--resume-title-gap", `${styles.titleGap}px`);
   root.paper.style.setProperty("--resume-photo-size", `${styles.photoSize}mm`);
+  root.paper.style.setProperty("--resume-photo-offset", `${styles.photoOffset}px`);
   root.paper.style.setProperty("--resume-logo-size", `${styles.logoSize}mm`);
+  root.paper.style.setProperty("--resume-summary-offset", `${styles.summaryOffset}px`);
   root.paper.style.setProperty("--education-school-col", `${styles.educationSchoolCol}mm`);
   root.paper.style.setProperty("--education-degree-col", `${styles.educationDegreeCol}mm`);
   root.paper.style.setProperty("--project-role-col", `${styles.projectRoleCol}mm`);
@@ -1184,7 +1196,7 @@ function renderAcademicHeader(profile) {
   return `
     <header class="academic-header">
       <div class="academic-brand">
-        ${profile.logo ? `<img src="${escapeAttribute(profile.logo)}" alt="${escapeAttribute(profile.school || "校徽")}" />` : `<span>上传校徽</span>`}
+        ${profile.logo ? `<img src="${escapeAttribute(profile.logo)}" alt="${escapeAttribute(profile.school || "校徽")}" />` : ""}
       </div>
       <div class="academic-name-block">
         <h2 data-ref="profile.name">${richText(profile.name || "未命名简历")}</h2>
@@ -1335,8 +1347,9 @@ function wrapSection(keyOrTitle, content, customTitle = false, titleRef = "") {
     state.activeTemplate === "academic" && TEMPLATE_ASSETS[iconKey]
       ? `<img class="section-icon" src="${TEMPLATE_ASSETS[iconKey]}" alt="" />`
       : "";
+  const sectionClass = !customTitle && typeof keyOrTitle === "string" ? ` section-${keyOrTitle}` : "";
   return `
-    <section class="resume-section">
+    <section class="resume-section${sectionClass}">
       <h3 class="resume-section-title">${icon}<span ${sectionTitleRef ? `data-ref="${sectionTitleRef}"` : ""}>${richText(title)}</span></h3>
       ${content}
     </section>

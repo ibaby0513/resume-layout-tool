@@ -1035,6 +1035,10 @@ button {
   border: 0;
 }
 
+.academic-brand:empty {
+  min-height: calc(var(--resume-logo-size, 35mm) + 6mm);
+}
+
 .academic-brand img {
   width: var(--resume-logo-size, 35mm);
   height: var(--resume-logo-size, 35mm);
@@ -1115,6 +1119,7 @@ button {
   background: #ffffff;
   color: #777777;
   font-size: 13px;
+  transform: translateY(var(--resume-photo-offset, 0px));
 }
 
 .resume-photo img {
@@ -1128,6 +1133,10 @@ button {
   padding: 8px 10px;
   background: #edf3f6;
   border-left: 4px solid var(--resume-accent, var(--accent));
+}
+
+.section-summary {
+  transform: translateY(var(--resume-summary-offset, 0px));
 }
 
 .summary-box p:last-child {
