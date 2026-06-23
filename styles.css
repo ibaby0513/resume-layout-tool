@@ -1086,7 +1086,13 @@ button {
   grid-area: info;
   position: relative;
   display: grid;
-  grid-template-columns: repeat(2, minmax(0, 1fr));
+  grid-template-columns: minmax(0, var(--resume-info-left-col, 50%)) minmax(0, 1fr);
+  grid-template-areas:
+    "gender origin"
+    "birth politics"
+    "phone email"
+    "address address"
+    "research research";
   gap: 3px 12px;
   transform: translateX(var(--resume-info-offset, 0px));
 }
@@ -1108,22 +1114,15 @@ button {
   min-width: 0;
 }
 
-.info-row-gender,
-.info-row-birth,
-.info-row-phone {
-  grid-column: 1;
-}
+.info-row-gender { grid-area: gender; }
+.info-row-origin { grid-area: origin; }
+.info-row-birth { grid-area: birth; }
+.info-row-politics { grid-area: politics; }
+.info-row-phone { grid-area: phone; }
+.info-row-email { grid-area: email; }
 
-.info-row-origin,
-.info-row-politics,
-.info-row-email {
-  grid-column: 2;
-}
-
-.info-row-address,
-.info-row-researchDirection {
-  grid-column: 1 / -1;
-}
+.info-row-address { grid-area: address; }
+.info-row-researchDirection { grid-area: research; }
 
 .info-row-address strong,
 .info-row-researchDirection strong {
@@ -1159,6 +1158,7 @@ button {
 }
 
 .profile-info-drag-handle,
+.info-column-drag-handle,
 .photo-drag-handle,
 .name-drag-handle {
   position: absolute;
@@ -1178,6 +1178,7 @@ button {
 }
 
 .profile-info-drag-handle::before,
+.info-column-drag-handle::before,
 .photo-drag-handle::before,
 .name-drag-handle::before {
   content: "";
@@ -1190,6 +1191,7 @@ button {
 }
 
 .profile-info-drag-handle::after,
+.info-column-drag-handle::after,
 .photo-drag-handle::after,
 .name-drag-handle::after {
   content: "";
@@ -1205,6 +1207,8 @@ button {
 
 .academic-info:hover .profile-info-drag-handle,
 .profile-info-drag-handle:hover,
+.academic-info:hover .info-column-drag-handle,
+.info-column-drag-handle:hover,
 .resume-photo:hover .photo-drag-handle,
 .photo-drag-handle:hover,
 .academic-name-block:hover .name-drag-handle,
@@ -1214,12 +1218,19 @@ button {
 
 .profile-info-drag-handle:hover::before,
 .profile-info-drag-handle:focus-visible::before,
+.info-column-drag-handle:hover::before,
+.info-column-drag-handle:focus-visible::before,
 .photo-drag-handle:hover::before,
 .photo-drag-handle:focus-visible::before,
 .name-drag-handle:hover::before,
 .name-drag-handle:focus-visible::before {
   width: 2px;
   background: var(--resume-accent, var(--accent));
+}
+
+.info-column-drag-handle {
+  left: var(--resume-info-left-col, 50%);
+  cursor: ew-resize;
 }
 
 .summary-box p:last-child {

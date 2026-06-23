@@ -48,6 +48,7 @@ const DEFAULT_STATE = {
     nameOffset: 0,
     nameOffsetY: 0,
     infoOffset: 0,
+    infoLeftCol: 50,
     educationSchoolCol: 62,
     educationDegreeCol: 32,
     projectRoleCol: 38,
@@ -181,6 +182,8 @@ const root = {
   nameOffsetYValue: document.querySelector("#nameOffsetYValue"),
   infoOffset: document.querySelector("#infoOffset"),
   infoOffsetValue: document.querySelector("#infoOffsetValue"),
+  infoLeftCol: document.querySelector("#infoLeftCol"),
+  infoLeftColValue: document.querySelector("#infoLeftColValue"),
   backupExportBtn: document.querySelector("#backupExportBtn"),
   backupImportBtn: document.querySelector("#backupImportBtn"),
   backupImportInput: document.querySelector("#backupImportInput"),
@@ -249,6 +252,7 @@ function bindGlobalActions() {
   bindStyle("nameOffset", Number);
   bindStyle("nameOffsetY", Number);
   bindStyle("infoOffset", Number);
+  bindStyle("infoLeftCol", Number);
 }
 
 function exportStateBackup() {
@@ -374,6 +378,7 @@ function renderStyleControls() {
   setControl("nameOffset", styles.nameOffset, "px");
   setControl("nameOffsetY", styles.nameOffsetY, "px");
   setControl("infoOffset", styles.infoOffset, "px");
+  setControl("infoLeftCol", styles.infoLeftCol, "%");
 }
 
 function setControl(key, value, unit, digits) {
@@ -400,6 +405,12 @@ function startEducationTabDrag(event) {
   const infoHandle = event.target.closest(".profile-info-drag-handle");
   if (infoHandle) {
     startHeaderOffsetDrag(event, infoHandle, "infoOffset", "", "--resume-info-offset", "");
+    return;
+  }
+
+  const infoColumnHandle = event.target.closest(".info-column-drag-handle");
+  if (infoColumnHandle) {
+    startInfoColumnDrag(event, infoColumnHandle);
     return;
   }
 
@@ -485,6 +496,33 @@ function updateProjectTabFromPointer(row, clientX) {
   const xMm = clamp((clientX - rect.left) / pxPerMm, 24, maxStart);
   state.styles.projectRoleCol = xMm;
   root.paper.style.setProperty("--project-role-col", `${state.styles.projectRoleCol}mm`);
+}
+
+function startInfoColumnDrag(event, handle) {
+  const row = handle.closest(".academic-info");
+  if (!row) return;
+  event.preventDefault();
+  event.stopPropagation();
+
+  const move = (moveEvent) => updateInfoColumnFromPointer(row, moveEvent.clientX);
+  const stop = () => {
+    window.removeEventListener("pointermove", move);
+    window.removeEventListener("pointerup", stop);
+    persist();
+    renderStyleControls();
+  };
+
+  handle.setPointerCapture?.(event.pointerId);
+  updateInfoColumnFromPointer(row, event.clientX);
+  window.addEventListener("pointermove", move);
+  window.addEventListener("pointerup", stop);
+}
+
+function updateInfoColumnFromPointer(row, clientX) {
+  const rect = row.getBoundingClientRect();
+  const percent = ((clientX - rect.left) / rect.width) * 100;
+  state.styles.infoLeftCol = clamp(Math.round(percent), 35, 65);
+  root.paper.style.setProperty("--resume-info-left-col", `${state.styles.infoLeftCol}%`);
 }
 
 function startHeaderOffsetDrag(event, handle, xKey, yKey, xVariable, yVariable) {
@@ -1207,6 +1245,7 @@ function renderPreview() {
   root.paper.style.setProperty("--resume-name-offset-x", `${styles.nameOffset}px`);
   root.paper.style.setProperty("--resume-name-offset-y", `${styles.nameOffsetY}px`);
   root.paper.style.setProperty("--resume-info-offset", `${styles.infoOffset}px`);
+  root.paper.style.setProperty("--resume-info-left-col", `${styles.infoLeftCol}%`);
   root.paper.style.setProperty("--education-school-col", `${styles.educationSchoolCol}mm`);
   root.paper.style.setProperty("--education-degree-col", `${styles.educationDegreeCol}mm`);
   root.paper.style.setProperty("--project-role-col", `${styles.projectRoleCol}mm`);
@@ -1268,7 +1307,7 @@ function renderAcademicHeader(profile) {
         <h2 data-ref="profile.name">${richText(profile.name || "未命名简历")}</h2>
         ${profile.target ? `<div class="academic-target" data-ref="profile.target">${richText(profile.target)}</div>` : ""}
       </div>
-      <div class="academic-info"><span class="profile-info-drag-handle" title="左右拖动顶部个人信息位置" aria-hidden="true"></span>${info
+      <div class="academic-info"><span class="profile-info-drag-handle" title="左右拖动顶部个人信息位置" aria-hidden="true"></span><span class="info-column-drag-handle" title="拖动顶部信息两列分界" aria-hidden="true"></span>${info
         .map(
           ([label, value, key]) =>
             `<div class="info-row info-row-${key}"><strong>${label}：</strong><span data-ref="profile.${key}">${richText(value)}</span></div>`
