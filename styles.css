@@ -1099,17 +1099,35 @@ button {
 }
 
 .info-row strong {
-  flex: 0 0 auto;
+  flex: 0 0 4.8em;
   color: #111111;
 }
 
 .info-row span {
+  flex: 1 1 auto;
   min-width: 0;
+}
+
+.info-row-gender,
+.info-row-birth,
+.info-row-phone {
+  grid-column: 1;
+}
+
+.info-row-origin,
+.info-row-politics,
+.info-row-email {
+  grid-column: 2;
 }
 
 .info-row-address,
 .info-row-researchDirection {
   grid-column: 1 / -1;
+}
+
+.info-row-address strong,
+.info-row-researchDirection strong {
+  flex-basis: 4.8em;
 }
 
 .resume-photo {

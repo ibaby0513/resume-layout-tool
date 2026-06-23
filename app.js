@@ -74,7 +74,7 @@ const DEFAULT_STATE = {
       city: "北京",
       target: "人工智能算法工程师",
       address: "示例大学 人工智能学院",
-      researchDirection: "图像处理；深度学习；机器视觉；多模态融合",
+      researchDirection: "图像处理、深度学习、机器视觉、多模态融合",
       website: "",
       photo: "",
     },
