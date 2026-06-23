@@ -1136,7 +1136,27 @@ button {
 }
 
 .section-summary {
-  transform: translateY(var(--resume-summary-offset, 0px));
+  position: relative;
+  transform: translateX(var(--resume-summary-offset, 0px));
+}
+
+.summary-drag-handle {
+  position: absolute;
+  top: 4px;
+  left: -12px;
+  width: 8px;
+  height: calc(100% - 8px);
+  min-height: 24px;
+  border-radius: 999px;
+  background: rgba(31, 93, 122, 0.3);
+  cursor: ew-resize;
+  opacity: 0.45;
+}
+
+.section-summary:hover .summary-drag-handle,
+.summary-drag-handle:hover {
+  opacity: 1;
+  background: var(--resume-accent, var(--accent));
 }
 
 .summary-box p:last-child {

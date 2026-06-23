@@ -376,6 +376,12 @@ function updateStyle(key, value) {
 }
 
 function startEducationTabDrag(event) {
+  const summaryHandle = event.target.closest(".summary-drag-handle");
+  if (summaryHandle) {
+    startSummaryDrag(event, summaryHandle);
+    return;
+  }
+
   const projectHandle = event.target.closest(".project-tab-handle");
   if (projectHandle) {
     startProjectTabDrag(event, projectHandle);
@@ -452,6 +458,29 @@ function updateProjectTabFromPointer(row, clientX) {
   const xMm = clamp((clientX - rect.left) / pxPerMm, 24, maxStart);
   state.styles.projectRoleCol = xMm;
   root.paper.style.setProperty("--project-role-col", `${state.styles.projectRoleCol}mm`);
+}
+
+function startSummaryDrag(event, handle) {
+  event.preventDefault();
+  event.stopPropagation();
+
+  const startX = event.clientX;
+  const startOffset = Number(state.styles.summaryOffset) || 0;
+  const move = (moveEvent) => {
+    state.styles.summaryOffset = clamp(startOffset + moveEvent.clientX - startX, -90, 90);
+    root.paper.style.setProperty("--resume-summary-offset", `${state.styles.summaryOffset}px`);
+    renderStyleControls();
+  };
+  const stop = () => {
+    window.removeEventListener("pointermove", move);
+    window.removeEventListener("pointerup", stop);
+    persist();
+  };
+
+  handle.setPointerCapture?.(event.pointerId);
+  move(event);
+  window.addEventListener("pointermove", move);
+  window.addEventListener("pointerup", stop);
 }
 
 function clamp(value, min, max) {
@@ -1348,8 +1377,13 @@ function wrapSection(keyOrTitle, content, customTitle = false, titleRef = "") {
       ? `<img class="section-icon" src="${TEMPLATE_ASSETS[iconKey]}" alt="" />`
       : "";
   const sectionClass = !customTitle && typeof keyOrTitle === "string" ? ` section-${keyOrTitle}` : "";
+  const dragHandle =
+    !customTitle && keyOrTitle === "summary"
+      ? `<span class="summary-drag-handle" title="左右拖动自我介绍位置" aria-hidden="true"></span>`
+      : "";
   return `
     <section class="resume-section${sectionClass}">
+      ${dragHandle}
       <h3 class="resume-section-title">${icon}<span ${sectionTitleRef ? `data-ref="${sectionTitleRef}"` : ""}>${richText(title)}</span></h3>
       ${content}
     </section>
